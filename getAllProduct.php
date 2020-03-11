@@ -4,7 +4,7 @@ include('Api.php');
 include ('config.php');
 include ('Database.php');
 
-$connector = new Api('deaec2ac82e652297575798a5fe2ae92','200087f6a0c055ef4a3a592909e74f17');
+$connector = new Api('deaec2ac82e652297575798a5fe2ae92','419b766cb5eec348b93622ae65c5e27a');
 $database = new Database(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
 $products = $connector->getAllProducts();
 
