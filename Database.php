@@ -54,7 +54,7 @@ class Database
         $sql = 'INSERT INTO products (productID, name, description, categories_ids, create_at, price, `type`, quantity, backorders, manage_stock, modified_at)  ' .
             'VALUES (
             "' . $dataProduct['id'] . '", '
-            . '"' . ($dataProduct['name'] ?? null) . '", '
+            . '"' . addcslashes(html_entity_decode($dataProduct['name'] ?? null),'"') . '", '
             . '"' . addcslashes(html_entity_decode($dataProduct['description'] ?? null),'"') . '", '
             . '"' .   ($dataProduct['categories_ids'] ?? 0) . '", '
             . '"' . ($dataProduct['create_at'] ?? null) . '", '
@@ -70,7 +70,7 @@ class Database
     public function updateProduct(array $dataProduct)
     {
         $sql = 'UPDATE products ' .
-            'SET name="' . ($dataProduct['name'] . '", '
+            'SET name="' . (addcslashes(html_entity_decode($dataProduct['name']),'"') . '", '
             . 'description="' . (addcslashes(html_entity_decode($dataProduct['description']),'"') ?? null) . '", '
             . 'categories_ids="' . ($dataProduct['categories_ids'] ?? null) . '", '
             . 'create_at="' . $dataProduct['create_at'] ?? null) . '", '
@@ -81,7 +81,6 @@ class Database
             .'backorders='. ($dataProduct['backorders'] ?? null) . ', '
             .'modified_at="'. ($dataProduct['modified_at'] ?? null) . '" 
             WHERE productID = ' . ($dataProduct['id'] ?? null) ;
-
         return mysqli_query($this->conn, $sql);
     }
 
@@ -96,15 +95,6 @@ class Database
 
     public function getCountYesterdayPage ($table) {
         return ceil(mysqli_num_rows($this->conn->query('SELECT productID FROM ' . $table . ' WHERE create_at LIKE "' . date("Y-m-d",strtotime("-1 days")) . '%"')) / 5);
-    }
-
-    private function setNull(array $dataProduct)
-    {
-        foreach ($dataProduct as $key => $item) {
-            if($item == ""){
-                $dataProduct[$key] = null;
-            }
-        }
     }
 
 }
